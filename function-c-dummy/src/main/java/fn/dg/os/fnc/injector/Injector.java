@@ -172,9 +172,8 @@ public class Injector extends AbstractVerticle {
       this.remote = new RemoteCacheManager(
          new ConfigurationBuilder()
             .addServer()
-            //.host("jdg-app-hotrod")
-            .host("infinispan-app-hotrod")
-            .port(11222)
+            .host(System.getenv("INFINISPAN_HOST"))
+            .port(Integer.parseInt(System.getenv("INFINISPAN_PORT")))
             .build()
       );
 

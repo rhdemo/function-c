@@ -12,5 +12,8 @@ ENV JAVA_CLASSPATH=${JAVA_APP_DIR}/classes:${JAVA_LIB_DIR}/*
 ENV JAVA_OPTIONS="-Dvertx.cacheDirBase=/tmp -Dvertx.disableDnsResolver=true"
 ENV JAVA_MAIN_CLASS="io.vertx.core.Launcher run fn.dg.os.fnc.injector.Injector"
 
+ENV INFINISPAN_HOST=jdg-app-hotrod.infinispan
+ENV INFINISPAN_PORT=11222
+
 # Copy classes
 COPY target/classes /deployments/classes
