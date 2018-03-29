@@ -32,7 +32,6 @@ public class Injector extends AbstractVerticle {
    static final Map<String, String> TASKS = new HashMap<>();
 
    private RemoteCacheManager remote;
-   private RemoteCache<String, String> tasksCache;
    private RemoteCache<String, String> scoresCache;
 
    private long scoreTimer;
@@ -66,7 +65,6 @@ public class Injector extends AbstractVerticle {
       vertx
          .rxExecuteBlocking(this::remoteCacheManager)
          .flatMap(x -> vertx.rxExecuteBlocking(scoresCache()))
-         .flatMap(x -> vertx.rxExecuteBlocking(tasksCache()))
          .flatMap(x ->
             vertx
                .createHttpServer()
@@ -123,7 +121,7 @@ public class Injector extends AbstractVerticle {
    }
 
    private void inject(RoutingContext rc) {
-      initCaches()
+      clearScores()
          .subscribe(
             () -> {
                Random r = new Random();
@@ -165,16 +163,6 @@ public class Injector extends AbstractVerticle {
          );
    }
 
-   private Completable initCaches() {
-      return CompletableInterop
-         .fromFuture(
-            scoresCache
-               .clearAsync()
-               .thenCompose(x -> tasksCache.clearAsync())
-               .thenCompose(x -> tasksCache.putAllAsync(TASKS))
-         );
-   }
-
    private Completable clearScores() {
       return CompletableInterop
          .fromFuture(
@@ -193,14 +181,6 @@ public class Injector extends AbstractVerticle {
       );
 
       f.complete(null);
-   }
-
-   private Handler<Future<RemoteCache<String, String>>> tasksCache() {
-      return f -> {
-         final RemoteCache<String, String> cache = remote.getCache("tasks");
-         this.tasksCache = cache;
-         f.complete(cache);
-      };
    }
 
    private Handler<Future<RemoteCache<String, String>>> scoresCache() {
