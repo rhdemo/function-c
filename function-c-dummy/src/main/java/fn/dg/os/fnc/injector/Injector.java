@@ -85,10 +85,17 @@ public class Injector extends AbstractVerticle {
       log.info("Stop injector");
       final boolean cancelled = vertx.cancelTimer(scoreTimer);
 
-      if (cancelled)
-         rc.response().end("Injector stopped");
-      else
+      if (cancelled) {
+         clearScores()
+            .subscribe(
+               () ->
+                  rc.response().end("Injector stopped and cleared cache")
+               , t ->
+                  rc.response().end("Injector stopped but failed to clear cache: " + t.toString())
+            );
+      } else {
          rc.response().end("Injector had not been started");
+      }
    }
 
    private void sink(RoutingContext rc) {
@@ -165,6 +172,14 @@ public class Injector extends AbstractVerticle {
                .clearAsync()
                .thenCompose(x -> tasksCache.clearAsync())
                .thenCompose(x -> tasksCache.putAllAsync(TASKS))
+         );
+   }
+
+   private Completable clearScores() {
+      return CompletableInterop
+         .fromFuture(
+            scoresCache
+               .clearAsync()
          );
    }
 
