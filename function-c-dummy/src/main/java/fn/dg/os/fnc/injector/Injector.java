@@ -58,7 +58,7 @@ public class Injector extends AbstractVerticle {
    public void start(io.vertx.core.Future<Void> future) throws Exception {
       Router router = Router.router(vertx);
       router.get("/inject").handler(this::inject);
-      router.get("/stop-inject").handler(this::stopInject);
+      router.get("/inject/stop").handler(this::stopInject);
 
       router.route("/sink*").handler(BodyHandler.create());
       router.post("/sink").handler(this::sink);
