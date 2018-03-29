@@ -47,6 +47,13 @@ wsk -i trigger create scoresEntryTrigger \
   -p cache_name scores
 ```
 
+Deploy injector:
+
+```bash
+cd function-c-dummy
+./deploy.sh
+```
+
 Create action:
 
 ```bash
@@ -66,15 +73,13 @@ wsk -i rule create scoresRule scoresEntryTrigger scoresPushAction
 Add some test data:
 
 ```
-cd function-c-dummy
-./deploy.sh
-curl http://.../inject
+curl http://function-c-dummy-function-c.apps.summit-aws.sysdeseng.com/inject
 ```
 
 Injector can be stopped via:
 
 ```bash
-curl http://.../stop-inject
+curl http://function-c-dummy-function-c.apps.summit-aws.sysdeseng.com/inject/stop
 ```
 
 Check if action triggered:

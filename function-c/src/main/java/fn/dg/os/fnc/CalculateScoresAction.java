@@ -27,7 +27,8 @@ public class CalculateScoresAction {
          .encoder(new GsonEncoder())
          .logger(new Slf4jLogger(MicroserviceA.class))
          //.target(MicroserviceA.class, "http://fn-c-injector.myproject:8080");
-         .target(MicroserviceA.class, "http://fn-c-injector-myproject.192.168.64.9.nip.io:80");
+         //.target(MicroserviceA.class, "http://fn-c-injector-myproject.192.168.64.9.nip.io:80");
+         .target(MicroserviceA.class, "http://function-c-dummy-function-c.apps.summit-aws.sysdeseng.com:80");
 
       JsonObject response = provider.forwardScore(value);
       return response;
