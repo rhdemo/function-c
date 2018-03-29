@@ -14,6 +14,7 @@ ENV JAVA_MAIN_CLASS="io.vertx.core.Launcher run fn.dg.os.fnc.injector.Injector"
 
 ENV INFINISPAN_HOST=jdg-app-hotrod.infinispan
 ENV INFINISPAN_PORT=11222
+ENV SCORES_CACHE_NAME=default5
 
 # Copy classes
 COPY target/classes /deployments/classes

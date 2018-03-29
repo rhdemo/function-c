@@ -205,7 +205,8 @@ public class Injector extends AbstractVerticle {
 
    private Handler<Future<RemoteCache<String, String>>> scoresCache() {
       return f -> {
-         final RemoteCache<String, String> cache = remote.getCache("scores");
+         final RemoteCache<String, String> cache = remote
+            .getCache(System.getenv("SCORES_CACHE_NAME"));
          this.scoresCache = cache;
          f.complete(cache);
       };
