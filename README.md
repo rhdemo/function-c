@@ -40,11 +40,11 @@ wsk -i action update -a feed true redhatdevelopers/infinispan-feed \
 Create trigger:
 
 ```bash
-wsk -i trigger create scoresEntryTrigger \
+wsk -i trigger create objectsEntryTrigger \
   --feed redhatdevelopers/infinispan-feed \
   -p hotrod_server_host jdg-app-hotrod.infinispan \
   -p hotrod_port 11222 \
-  -p cache_name scores
+  -p cache_name objects
 ```
 
 Deploy injector:
@@ -59,15 +59,16 @@ Create action:
 ```bash
 cd function-c
 mvn clean package
-wsk -i action create scoresPushAction \
+wsk -i action create objectsPushAction \
   target/fn-c.jar \
-  --main fn.dg.os.fnc.CalculateScoresAction
+  --main fn.dg.os.fnc.CalculateScoresAction \
+  -p microservice-endpoint scavenger-hunt-microservice.scavenger-hunt-microservice.svc:8080
 ```
 
 Create rule:
 
 ```bash
-wsk -i rule create scoresRule scoresEntryTrigger scoresPushAction
+wsk -i rule create objectsRule objectsEntryTrigger objectsPushAction
 ```
 
 Add some test data:
